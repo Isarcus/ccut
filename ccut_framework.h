@@ -1,13 +1,13 @@
 #ifndef CCUT_FRAMEWORK_H
 #define CCUT_FRAMEWORK_H
 
-#include <exception>
-#include <string>
 #include <map>
 #include <vector>
 #include <initializer_list>
+#include <string>
 #include <iostream>
 #include <sstream>
+#include <exception>
 #include <cassert>
 
 namespace ccut_framework
@@ -65,6 +65,7 @@ std::ostream &operator<<(std::ostream &os, std::initializer_list<colors> codes)
     return os << ansi(codes);
 }
 
+// All tests to be run in test_main()
 static std::map<std::string, test_func_t> tests;
 
 // Register a new test
@@ -122,7 +123,7 @@ static int test_main()
         catch (const std::exception& e)
         {
             std::cout << colors::yellow << "EXCEPTION\n" << colors::none;
-            failures.push_back({test.first, e.what()});
+            failures.push_back({test.first, std::string("Unexpected exception: ") + e.what()});
         }
         catch (...)
         {
@@ -134,7 +135,7 @@ static int test_main()
     // Print failure reasons, if any
     if (failures.size())
     {
-        std::cout << "- - - Failures - - -\n";
+        std::cout << "\n- - - Failures - - -\n";
         for (const auto& fail : failures)
         {
             //                  [function name]         why it failed
@@ -235,7 +236,7 @@ void assert_unequal(T1 lhs, T2 rhs, std::string lhs_str, std::string rhs_str, in
     ccut_framework::RegisterTest register_ccut_##funcname(#funcname, &funcname); /* register test */ \
     void funcname()                                                              /* implement test */
 
-// Run main
+// Run main test script
 #define TEST_MAIN() int main() { return ccut_framework::test_main(); }
 
 } // namespace ccut_framework
