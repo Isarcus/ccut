@@ -190,6 +190,19 @@ void assert_unequal(T1 lhs, T2 rhs, std::string lhs_str, std::string rhs_str, in
     }
 }
 
+void assert_almost_equal(long double lhs, long double rhs, std::string lhs_str, std::string rhs_str, int line)
+{
+    static constexpr long double allowable_error = 0.0001;
+    double real_error = std::abs(lhs - rhs);
+    if (real_error > allowable_error)
+    {
+        std::ostringstream os;
+        os << "Expected ALMOST EQUAL, but was NOT ALMOST EQUAL: [" << lhs_str << "]"
+           << " and [" << rhs_str << "]";
+        throw ccut_exception(os.str(), line);
+    }
+}
+
 #define CCUT_DETERMINE_THROW(func_call, varname) \
     bool varname = false;                        \
     try                                          \
@@ -230,6 +243,7 @@ void assert_unequal(T1 lhs, T2 rhs, std::string lhs_str, std::string rhs_str, in
 #define ASSERT_FALSE( statement ) ccut_framework::assert_false(statement, #statement, __LINE__)
 #define ASSERT_EQUAL( lhs, rhs ) ccut_framework::assert_equal(lhs, rhs, #lhs, #rhs, __LINE__)
 #define ASSERT_UNEQUAL( lhs, rhs ) ccut_framework::assert_unequal(lhs, rhs, #lhs, #rhs, __LINE__)
+#define ASSERT_ALMOST_EQUAL( lhs, rhs ) ccut_framework::assert_almost_equal(lhs, rhs, #lhs, #rhs, __LINE__)
 #define ASSERT_EXCEPTION( func_call ) CCUT_ASSERT_EXCEPTION_IMPL(func_call)
 #define ASSERT_NO_EXCEPTION( func_call ) CCUT_ASSERT_NO_EXCEPTION_IMPL(func_call)
 
