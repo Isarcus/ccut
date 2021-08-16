@@ -167,7 +167,7 @@ void assert_false(bool expr, std::string str, int line)
 }
 
 template <typename T1, typename T2>
-void assert_equal(T1 lhs, T2 rhs, std::string lhs_str, std::string rhs_str, int line)
+void assert_equal(const T1& lhs, const T2& rhs, std::string lhs_str, std::string rhs_str, int line)
 {
     if (!(lhs == rhs))
     {
@@ -179,7 +179,7 @@ void assert_equal(T1 lhs, T2 rhs, std::string lhs_str, std::string rhs_str, int 
 }
 
 template <typename T1, typename T2>
-void assert_unequal(T1 lhs, T2 rhs, std::string lhs_str, std::string rhs_str, int line)
+void assert_unequal(const T1& lhs, const T2& rhs, std::string lhs_str, std::string rhs_str, int line)
 {
     if (!(lhs != rhs))
     {
