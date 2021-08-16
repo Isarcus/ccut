@@ -205,8 +205,8 @@ void assert_unequal(T1 lhs, T2 rhs, std::string lhs_str, std::string rhs_str, in
 #define CCUT_CONCAT(x, y) CCUT_CONCAT_IMPL(x, y)
 
 #define CCUT_ASSERT_EXCEPTION_IMPL(func_call)                                      \
-    CCUT_DETERMINE_THROW(func_call, CCUT_CONCAT(ccut_threw_, __LINE__))                  \
-    if (!CCUT_CONCAT(ccut_threw_, __LINE__))                                             \
+    CCUT_DETERMINE_THROW(func_call, CCUT_CONCAT(ccut_threw_, __LINE__))            \
+    if (!CCUT_CONCAT(ccut_threw_, __LINE__))                                       \
     {                                                                              \
         std::ostringstream os;                                                     \
         os << "Expected EXCEPTION, but got NO EXCEPTION: \"" << #func_call << '"'; \
@@ -214,8 +214,8 @@ void assert_unequal(T1 lhs, T2 rhs, std::string lhs_str, std::string rhs_str, in
     }
 
 #define CCUT_ASSERT_NO_EXCEPTION_IMPL(func_call)                                   \
-    CCUT_DETERMINE_THROW(func_call, CCUT_CONCAT(ccut_threw_, __LINE__))                  \
-    if (CCUT_CONCAT(ccut_threw_, __LINE__))                                              \
+    CCUT_DETERMINE_THROW(func_call, CCUT_CONCAT(ccut_threw_, __LINE__))            \
+    if (CCUT_CONCAT(ccut_threw_, __LINE__))                                        \
     {                                                                              \
         std::ostringstream os;                                                     \
         os << "Expected NO EXCEPTION, but got EXCEPTION: \"" << #func_call << '"'; \
