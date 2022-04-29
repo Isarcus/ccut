@@ -27,7 +27,7 @@ enum class colors
 };
 
 // Output the specified escape code(s) to a stream
-static inline std::string ansi(const std::initializer_list<colors> &codes)
+static inline std::string ansi(const std::initializer_list<colors>& codes)
 {
     // Doesn't make sense to call with no codes
     assert(codes.end() - codes.begin());
@@ -60,7 +60,7 @@ static inline std::ostream& operator<<(std::ostream& os, colors code)
 }
 
 // Helpful operator for outputting one ansi escape code
-static inline std::ostream &operator<<(std::ostream &os, std::initializer_list<colors> codes)
+static inline std::ostream& operator<<(std::ostream& os, std::initializer_list<colors> codes)
 {
     return os << ansi(codes);
 }
@@ -106,7 +106,7 @@ static inline int test_main()
     std::vector<std::pair<std::string, std::string>> failures;
 
     // Run all tests
-    for (const auto &test : tests)
+    for (const auto& test : tests)
     {
         std::cout << "Running test \"" + test.first + "\" . . . ";
 
@@ -209,7 +209,7 @@ static inline void assert_almost_equal(long double lhs, long double rhs, std::st
     {                                            \
         func_call;                               \
     }                                            \
-    catch (const std::exception &e)              \
+    catch (const std::exception& e)              \
     {                                            \
         varname = true;                          \
     }
