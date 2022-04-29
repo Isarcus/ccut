@@ -102,13 +102,21 @@ private:
 // Run all tests
 static inline int test_main()
 {
+    // Determine maximum test name length
+    size_t max_name_len = 0;
+    for (const auto& test : tests)
+    {
+        max_name_len = std::max(test.first.size(), max_name_len);
+    }
+
     //                    funcname     reason
     std::vector<std::pair<std::string, std::string>> failures;
 
     // Run all tests
     for (const auto& test : tests)
     {
-        std::cout << "Running test \"" + test.first + "\" . . . ";
+        size_t spaces = max_name_len - test.first.size();
+        std::cout << "Running test \"" << test.first << "\"" << std::string(spaces, ' ') << " . . . ";
 
         try
         {
@@ -123,7 +131,7 @@ static inline int test_main()
         catch (const std::exception& e)
         {
             std::cout << colors::yellow << "EXCEPTION\n" << colors::none;
-            failures.push_back({test.first, std::string("Unexpected exception: ") + e.what()});
+            failures.push_back({test.first, std::string("Unexpected std::exception: \"") + e.what() + '"'});
         }
         catch (...)
         {
