@@ -27,7 +27,7 @@ enum class colors
 };
 
 // Output the specified escape code(s) to a stream
-std::string ansi(const std::initializer_list<colors> &codes)
+static inline std::string ansi(const std::initializer_list<colors> &codes)
 {
     // Doesn't make sense to call with no codes
     assert(codes.end() - codes.begin());
@@ -54,13 +54,13 @@ std::string ansi(const std::initializer_list<colors> &codes)
 }
 
 // Helpful operator for outputting one ansi escape code
-std::ostream& operator<<(std::ostream& os, colors code)
+static inline std::ostream& operator<<(std::ostream& os, colors code)
 {
     return os << ansi({code});
 }
 
 // Helpful operator for outputting one ansi escape code
-std::ostream &operator<<(std::ostream &os, std::initializer_list<colors> codes)
+static inline std::ostream &operator<<(std::ostream &os, std::initializer_list<colors> codes)
 {
     return os << ansi(codes);
 }
@@ -72,7 +72,7 @@ static std::map<std::string, test_func_t> tests;
 class RegisterTest
 {
 public:
-    RegisterTest(std::string name, test_func_t func)
+    inline RegisterTest(std::string name, test_func_t func)
     {
         tests.emplace(name, func);
     }
@@ -82,12 +82,12 @@ public:
 class ccut_exception
 {
 public:
-    ccut_exception(std::string reason, int line)
+    inline ccut_exception(std::string reason, int line)
         : reason(reason)
         , line(line)
     {}
 
-    std::string what() const
+    inline std::string what() const
     {
         std::ostringstream os;
         os << "Line " << colors::bold << line << colors::none << ": " << reason;
@@ -100,7 +100,7 @@ private:
 };
 
 // Run all tests
-static int test_main()
+static inline int test_main()
 {
     //                    funcname     reason
     std::vector<std::pair<std::string, std::string>> failures;
@@ -154,20 +154,20 @@ static int test_main()
 // Assertion Functions //
 //                     //
 
-void assert_true(bool expr, std::string str, int line)
+static inline void assert_true(bool expr, std::string str, int line)
 {
     if (!expr)
         throw ccut_exception("Expected TRUE, but was FALSE: \"" + str + '"', line);
 }
 
-void assert_false(bool expr, std::string str, int line)
+static inline void assert_false(bool expr, std::string str, int line)
 {
     if (expr)
         throw ccut_exception("Expected FALSE, but was TRUE: \"" + str + '"', line);
 }
 
 template <typename T1, typename T2>
-void assert_equal(const T1& lhs, const T2& rhs, std::string lhs_str, std::string rhs_str, int line)
+static inline void assert_equal(const T1& lhs, const T2& rhs, std::string lhs_str, std::string rhs_str, int line)
 {
     if (!(lhs == rhs))
     {
@@ -179,7 +179,7 @@ void assert_equal(const T1& lhs, const T2& rhs, std::string lhs_str, std::string
 }
 
 template <typename T1, typename T2>
-void assert_unequal(const T1& lhs, const T2& rhs, std::string lhs_str, std::string rhs_str, int line)
+static inline void assert_unequal(const T1& lhs, const T2& rhs, std::string lhs_str, std::string rhs_str, int line)
 {
     if (!(lhs != rhs))
     {
@@ -190,7 +190,7 @@ void assert_unequal(const T1& lhs, const T2& rhs, std::string lhs_str, std::stri
     }
 }
 
-void assert_almost_equal(long double lhs, long double rhs, std::string lhs_str, std::string rhs_str, int line)
+static inline void assert_almost_equal(long double lhs, long double rhs, std::string lhs_str, std::string rhs_str, int line)
 {
     static constexpr long double allowable_error = 0.0001;
     double real_error = std::abs(lhs - rhs);
@@ -248,14 +248,14 @@ void assert_almost_equal(long double lhs, long double rhs, std::string lhs_str, 
 #define ASSERT_NO_EXCEPTION( func_call ) CCUT_ASSERT_NO_EXCEPTION_IMPL(func_call)
 
 // Declare a new test function
-#define TEST(funcname)                                                                               \
-    void funcname();                                                             /* declare test */  \
-    ccut_framework::RegisterTest register_ccut_##funcname(#funcname, &funcname); /* register test */ \
-    void funcname()                                                              /* implement test */
+#define TEST(funcname)                                                                                      \
+    static inline void funcname();                                                      /* declare test */  \
+    static ccut_framework::RegisterTest register_ccut_##funcname(#funcname, &funcname); /* register test */ \
+    void funcname()                                                                     /* implement test */
 
 // Run main test script
 #define TEST_MAIN() int main() { return ccut_framework::test_main(); }
 
 } // namespace ccut_framework
 
-#endif // ifndef CCUT_UNIT_TEST_FRAMEWORK_H
+#endif // ifndef CCUT_FRAMEWORK_H
